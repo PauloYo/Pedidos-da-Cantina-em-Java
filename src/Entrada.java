@@ -113,8 +113,8 @@ public class Entrada {
 
         while (op != 0) {
             if (op == 1) cadAdmin(s);
-            if (op == 2) {/*cadAluno(s);*/}
-            if (op == 3) {/*cadProduto(s);*/}
+            if (op == 2) cadAluno(s);
+            if (op == 3) cadProduto(s);
             if (op == 4) {/*cadSala(s);*/}
             if (op < 0 || op > 4) System.out.println("Opção inválida. Tente novamente: ");
 
@@ -142,7 +142,7 @@ public class Entrada {
             if (op == 1) {/*fazerPedido(a, s);*/}
             if (op == 2) {/*entregarPedido(a, s);*/}
             if (op == 3) {/*listarPedidos(a, s);*/}
-            if (op == 4) {/*inserirCredito(a, s);*/}
+            if (op == 4) inserirCredito(a, s);
             if (op < 0 || op > 4) System.out.println("Opção inválida. Tente novamente: ");
 
             op = this.lerInteiro(msg);
@@ -201,6 +201,53 @@ public class Entrada {
         System.out.println("Usuário " + a + " criado com sucesso.");
     }
 
+    /**
+     * Lê os dados de um novo aluno e cadastra-o no sistema.
+     * @param s: Um objeto da classe Sistema
+     */
+    public void cadAluno(Sistema s) {
+        System.out.println("\n** Cadastrando um novo aluno **\n");
+        String cpf = this.lerLinha("Digite o cpf: ");
 
+        while (s.getAluno(cpf) != null) {
+            cpf = this.lerLinha("Usuário já existente. Escolha outro cpf: ");
+        }
+
+        String nome = this.lerLinha("Digite o nome: ");
+        String senha = this.lerLinha("Digite a senha: ");
+
+        Aluno a = new Aluno(cpf, nome, senha);
+        s.addAluno(a);
+
+        System.out.println("Usuário " + a + " criado com sucesso.");
+    }
+
+    /**
+     * Lê os dados de um novo produto e cadastra-o no sistema.
+     * @param s: Um objeto da classe Sistema
+     */
+    public void cadProduto(Sistema s) {
+        System.out.println("\n** Cadastrando um novo produto **\n");
+        String nome = this.lerLinha("Digite o nome do produto: ");
+        int estoque = this.lerInteiro("Digite a quantidade no estoque: ");
+        double valor = this.lerDouble("Digite o preço do produto: ")
+
+        String id = "PROD-" + (s.getProdutos().size() + 1);
+
+        Produto p = new Produto(nome, id, estoque, valor);
+        s.addProd(p);
+
+        System.out.println("Produto " + p + " criado com sucesso.");
+    }
+
+
+    /***************************/
+    /** FUNCIONALIDADES ALUNO **/
+    /***************************/
+
+    public void inserirCredito(Aluno a, Sistema s){
+        double valor = this.lerDouble("Digite um valor de credito a ser inserido ao seu saldo: ");
+        a.inserirSaldo(valor);
+    }
 
 }

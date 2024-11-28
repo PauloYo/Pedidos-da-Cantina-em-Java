@@ -1,8 +1,11 @@
 import java.util.ArrayList;
 
 public class Sistema {
-    ArrayList<Aluno> alunos;
-    ArrayList<Admin> adms;
+    private ArrayList<Aluno> alunos;
+    private ArrayList<Admin> adms;
+    private ArrayList<Produto> prods;
+    private ArrayList<Pedido> pedidos;
+    private ArrayList<Sala> salas;
 
     public Sistema() {
         this.alunos = new ArrayList<>();
@@ -11,6 +14,14 @@ public class Sistema {
 
     public void addAdmin(Admin a) {
         this.adms.add(a);
+    }
+
+    public void addAluno(Aluno a) {
+        this.alunos.add(a);
+    }
+
+    public void addProd(Produto p) {
+        this.prods.add(p);
     }
 
     public boolean sistemaVazio() {
@@ -31,6 +42,10 @@ public class Sistema {
         }
 
         return null;
+    }
+
+    public ArrayList<Produto> getProdutos() {
+        return this.prods;
     }
 
 }
