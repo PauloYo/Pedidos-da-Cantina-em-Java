@@ -24,6 +24,14 @@ public class Sistema {
         this.prods.add(p);
     }
 
+    public void addPedido(Pedido p) {
+        this.pedidos.add(p);
+    }
+
+    public void addSala(Sala s) {
+        this.salas.add(s);
+    }
+
     public boolean sistemaVazio() {
         return this.adms.size() == 0;
     }

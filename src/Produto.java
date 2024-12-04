@@ -10,9 +10,9 @@ public class Produto {
         this.valor = v;
     }
  
-    // public int getId() {
-    //     return id;
-    // }
+    public String getID() {
+        return this.id;
+    }
 
     // public String getNome() {
     //     return nome;

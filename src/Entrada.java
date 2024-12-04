@@ -240,6 +240,25 @@ public class Entrada {
         System.out.println("Produto " + p + " criado com sucesso.");
     }
 
+    /**
+     * Lê os dados de uma nova sala e cadastra-a no sistema.
+     * @param s: Um objeto da classe Sistema
+     */
+    public void cadSala(Sistema s) {
+        System.out.println("\n** Cadastrando uma nova sala **\n");
+        String bloco = this.lerLinha("Digite o bloco da sala: ");
+        String num = this.lerLinha("Digite o número da sala: ");
+        String andar = this.lerLinha("Digite o andar da sala (S/T): ");
+        int capacidade = this.lerInteiro("Digite a capacidade da sala: ");
+
+        String id = bloco + num + andar;
+
+
+        Sala sala = new Sala(id, bloco, andar, sala, capacidade);
+        s.addSala(sala);
+
+        System.out.println("Sala " + sala + " criada com sucesso.");
+
 
     /***************************/
     /** FUNCIONALIDADES ALUNO **/
