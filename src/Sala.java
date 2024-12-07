@@ -1,33 +1,27 @@
 public class Sala {
-    private String id, bloco, andar, sala;
-    private int capacidade;
+    private String numero, bloco, andar, id;
 
-    public Sala(String i, String b, String a, String s, int c) {
-        this.id = i;
+    public Sala(String n, String b, String a) {
+        this.numero = n;
         this.bloco = b;
         this.andar = a;
-        this.sala = s;
-        this.capacidade = c;
-    }
-
-    public String getID() {
-        return this.id;
+        this.id = b + n + a;
     }
 
     public String getBloco() {
         return this.bloco;
     }
 
-    public String getSala() {
-        return this.sala;
+    public String getNumero() {
+        return this.numero;
     }
 
     public String getAndar() {
         return this.andar;
     }
 
-    public int getCapacidade() {
-        return this.capacidade;
+    public String toString() {
+        return this.id;
     }
 
 }

@@ -7,19 +7,23 @@ public class Pedido {
     private ArrayList<Item> carrinho;
     private boolean entregue;
 
-    public Pedido(String cod, Aluno cl, Aluno ent, Sala s) {
+    public Pedido(String cod, Aluno cl) {
         this.cod = cod;
         this.cliente = cl;
-        this.entregador = ent;
-        this.s = s;
+        this.entregador = null;
+        this.s = null;
         this.carrinho = new ArrayList<>();
-        this. entregue = false;
+        this.entregue = false;
+    }
+
+    public void setSala(Sala s) {
+        this.s = s;
     }
 
     public String toString() {
         String s = "Codigo do Pedido: " + this.cod + "\nProdutos:";
         for (Item i : carrinho) {
-            s += "\n" + i.toString()
+            s += "\n" + i.toString();
         }
         s += "\nStatus: ";
         if (this.entregue) s += "Entregue";
@@ -34,6 +38,25 @@ public class Pedido {
             total += i.valorTotal();
         }
         return total;
+    }
+
+    public void atribuirEntregador(Aluno a) {
+        this.entregador = a;
+    }
+
+    public boolean disponivel() {
+        return !this.entregue;
+    }
+
+    public void entregue() {
+        this.entregue = true;
+    }
+
+    public void confirmar() {
+        this.cliente.retirarSaldo(valorTotal());
+        for (Item i : carrinho) {
+            i.getProd().retirarDeEstoque(i.getQtd_prod());
+        }
     }
     
 }

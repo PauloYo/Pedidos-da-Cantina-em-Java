@@ -139,7 +139,7 @@ public class Entrada {
         int op = this.lerInteiro(msg);
 
         while (op != 0) {
-            if (op == 1) {/*fazerPedido(a, s);*/}
+            if (op == 1) {fazerPedido(a, s);}
             if (op == 2) {/*entregarPedido(a, s);*/}
             if (op == 3) {/*listarPedidos(a, s);*/}
             if (op == 4) inserirCredito(a, s);
@@ -230,7 +230,7 @@ public class Entrada {
         System.out.println("\n** Cadastrando um novo produto **\n");
         String nome = this.lerLinha("Digite o nome do produto: ");
         int estoque = this.lerInteiro("Digite a quantidade no estoque: ");
-        double valor = this.lerDouble("Digite o preço do produto: ")
+        double valor = this.lerDouble("Digite o preço do produto: ");
 
         String id = "PROD-" + (s.getProdutos().size() + 1);
 
@@ -249,20 +249,81 @@ public class Entrada {
         String bloco = this.lerLinha("Digite o bloco da sala: ");
         String num = this.lerLinha("Digite o número da sala: ");
         String andar = this.lerLinha("Digite o andar da sala (S/T): ");
-        int capacidade = this.lerInteiro("Digite a capacidade da sala: ");
+        //int capacidade = this.lerInteiro("Digite a capacidade da sala: ");
 
-        String id = bloco + num + andar;
+        //String id = bloco + num + andar;
 
 
-        Sala sala = new Sala(id, bloco, andar, sala, capacidade);
+        Sala sala = new Sala(bloco, andar, num);
         s.addSala(sala);
 
         System.out.println("Sala " + sala + " criada com sucesso.");
-
+    }
 
     /***************************/
     /** FUNCIONALIDADES ALUNO **/
     /***************************/
+
+    public void fazerPedido(Aluno a, Sistema s) {
+        System.out.println("\n** Fazendo um novo pedido **\n");
+        
+        String cod = "PED-" + (s.getPedidos().size() + 1);
+        Pedido p = new Pedido(cod, a);
+        
+        System.out.println("\nSalas disponíveis:");
+        for (Sala sala : s.getSalas()) {
+            System.out.println(sala.toString());
+        }
+        String sala = this.lerLinha("Digite a sala: ");
+        if (s.getSala(sala) != null) {
+            p.setSala(s.getSala(sala));
+        } else {
+            System.out.println("Sala não encontrada.");
+        }
+
+        int op;
+        do {
+            System.out.println("\n*********************\nEscolha uma opção:\n1) Inserir produto no carrinho.\n2) Fechar pedido.");
+            op = this.lerInteiro(": ");
+            if (op == 1) {
+                System.out.println("\nProdutos disponíveis:");
+                for (Produto p : s.getProdutos()) {
+                    System.out.println(p.toString());
+                }
+                
+                String id = this.lerLinha("Digite o id do produto: ");
+                int qtd = this.lerInteiro("Digite a quantidade: ");
+                
+                if (s.getProduto(id) != null) {
+                    System.out.println("Produto não encontrado.");
+                } else if (s.getProduto(id).getEstoque() < qtd) {
+                    System.out.println("Estoque insuficiente.");
+                } else {
+                    Item i = new Item(s.getProduto(id), qtd);
+                    carrinho.add(i);
+                }
+            } else if (op != 2) {
+                System.out.println("Opção inválida. Tente novamente.");
+            }
+
+        } while (op != 2);
+        
+        Pedido p = new Pedido();
+        
+    }
+
+    public void entregarPedido(Aluno a, Sistema s) {
+        System.out.println("\n** Fazendo uma entrega de pedido **\n");
+        
+        System.out.println("\nPedidos disponíveis:");
+        for (Pedido ped : s.getPedidos()) {
+            System.out.println(ped.toString());
+        }
+
+        String id = this.lerLinha("Digite a id do pedido a ser entregue: ");
+
+        
+    }
 
     public void inserirCredito(Aluno a, Sistema s){
         double valor = this.lerDouble("Digite um valor de credito a ser inserido ao seu saldo: ");
