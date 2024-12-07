@@ -40,19 +40,19 @@ public class Pedido {
     // OUTROS
 
     public String toString() {
-        String s = "Codigo do Pedido: " + this.cod + "\nProdutos:";
+        String s = "\nCodigo do Pedido: " + this.cod + "\nProdutos:";
         for (Item i : carrinho) {
             s += "\n" + i.toString();
         }
         s += "\nStatus: ";
         if (this.entregue) s += "Entregue";
         else s += "Aberto";
-        s += "\nValor Total: R$ " + valorTotal();
+        s += "\nValor Total: R$" + String.format("%.2f", valorTotal());
         return s;
     }
 
     public double valorTotal() {
-        double total = 0;
+        double total = 0.00;
         for (Item i : carrinho) {
             total += i.valorTotal();
         }

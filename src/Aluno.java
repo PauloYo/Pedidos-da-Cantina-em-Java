@@ -3,7 +3,11 @@ public class Aluno extends Usuario{
 
     public Aluno(String cpf, String nome, String senha) {
         super(cpf, nome, senha);
-        this.saldo = 0;
+        this.saldo = 0.0;
+    }
+
+    public double getSaldo() {
+        return this.saldo;
     }
 
     public String toString() {

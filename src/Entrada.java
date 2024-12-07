@@ -93,6 +93,8 @@ public class Entrada {
             op = this.lerInteiro(msg);
         }
 
+        System.out.println("\nSistema encerrado.\n");
+
     }
 
     /**
@@ -172,14 +174,14 @@ public class Entrada {
     public void login(Sistema s) {
         System.out.println("\nBem vindo! Digite seus dados de login:");
         String cpf = this.lerLinha("CPF:");
-        String senha = this.lerLinha("Senha:");
+        String senha = this.lerLinha("\nSenha:");
 
         Admin adm = s.getAdmin(cpf);
         if (adm != null) {
             if (adm.validarAcesso(senha)) {
                 this.menu(adm, s);
             }
-            else System.out.println("Senha inválida.");
+            else System.out.println("\nSenha inválida.");
         }
         else {
             Aluno a = s.getAluno(cpf);
@@ -187,10 +189,10 @@ public class Entrada {
                 if (a.validarAcesso(senha)) {
                     this.menu(a, s);
                 }
-                else System.out.println("Senha inválida");
+                else System.out.println("\nSenha inválida");
             }
             else {
-                System.out.println("Usuário inexistente");
+                System.out.println("\nUsuário inexistente");
             }
         }
     }
@@ -208,17 +210,17 @@ public class Entrada {
         String cpf = this.lerLinha("Digite o cpf: ");
 
         while (s.getAdmin(cpf) != null) {
-            cpf = this.lerLinha("Usuário já existente. Escolha outro cpf: ");
+            cpf = this.lerLinha("\nUsuário já existente. Escolha outro cpf: ");
         }
 
-        String nome = this.lerLinha("Digite o nome: ");
-        String senha = this.lerLinha("Digite a senha: ");
-        String email = this.lerLinha("Digite o email: ");
+        String nome = this.lerLinha("\nDigite o nome: ");
+        String senha = this.lerLinha("\nDigite a senha: ");
+        String email = this.lerLinha("\nDigite o email: ");
 
         Admin a = new Admin(cpf, nome, senha, email);
         s.addAdmin(a);
 
-        System.out.println("Usuário " + a + " criado com sucesso.");
+        System.out.println("\nUsuário " + a + " criado com sucesso.");
     }
 
     /**
@@ -230,16 +232,16 @@ public class Entrada {
         String cpf = this.lerLinha("Digite o cpf: ");
 
         while (s.getAluno(cpf) != null) {
-            cpf = this.lerLinha("Usuário já existente. Escolha outro cpf: ");
+            cpf = this.lerLinha("\nUsuário já existente. Escolha outro cpf: ");
         }
 
-        String nome = this.lerLinha("Digite o nome: ");
-        String senha = this.lerLinha("Digite a senha: ");
+        String nome = this.lerLinha("\nDigite o nome: ");
+        String senha = this.lerLinha("\nDigite a senha: ");
 
         Aluno a = new Aluno(cpf, nome, senha);
         s.addAluno(a);
 
-        System.out.println("Usuário " + a + " criado com sucesso.");
+        System.out.println("\nUsuário " + a + " criado com sucesso.");
     }
 
     /**
@@ -249,15 +251,15 @@ public class Entrada {
     public void cadProduto(Sistema s) {
         System.out.println("\n** Cadastrando um novo produto **\n");
         String nome = this.lerLinha("Digite o nome do produto: ");
-        int estoque = this.lerInteiro("Digite a quantidade no estoque: ");
-        double valor = this.lerDouble("Digite o preço do produto: ");
+        int estoque = this.lerInteiro("\nDigite a quantidade no estoque: ");
+        double valor = this.lerDouble("\nDigite o preço do produto: ");
 
         String id = "PROD-" + (s.getProdutos().size() + 1);
 
         Produto p = new Produto(nome, id, estoque, valor);
         s.addProd(p);
 
-        System.out.println("Produto " + p + " criado com sucesso.");
+        System.out.println("\nProduto " + p + " criado com sucesso.");
     }
 
     /**
@@ -267,13 +269,13 @@ public class Entrada {
     public void cadSala(Sistema s) {
         System.out.println("\n** Cadastrando uma nova sala **\n");
         String bloco = this.lerLinha("Digite o bloco da sala: ");
-        String num = this.lerLinha("Digite o número da sala: ");
-        String andar = this.lerLinha("Digite o andar da sala (S/T): ");
+        String num = this.lerLinha("\nDigite o número da sala: ");
+        String andar = this.lerLinha("\nDigite o andar da sala (S/T): ");
 
         Sala sala = new Sala(num, bloco, andar);
         s.addSala(sala);
 
-        System.out.println("Sala " + sala.toString() + " criada com sucesso.");
+        System.out.println("\nSala " + sala.toString() + " criada com sucesso.");
     }
 
     /***************************/
@@ -281,7 +283,7 @@ public class Entrada {
     /***************************/
 
     public void fazerPedido(Aluno a, Sistema s) {
-        System.out.println("\n** Fazendo um novo pedido **\n");
+        System.out.println("\n** Fazendo um novo pedido **");
         
         String cod = "PEDIDO-" + (s.getPedidos().size() + 1);
         Pedido p = new Pedido(cod, a);
@@ -292,7 +294,7 @@ public class Entrada {
         }
         String sala = this.lerLinha("Digite a sala: ");
         if (s.getSala(sala) == null) {
-            System.out.println("Sala não encontrada.");
+            System.out.println("\nSala não encontrada.");
         } else {
             p.setSala(s.getSala(sala));
 
@@ -306,26 +308,35 @@ public class Entrada {
                         System.out.println(prod.toString());
                     }
                     
-                    String id = this.lerLinha("Digite o id do produto: ");
-                    int qtd = this.lerInteiro("Digite a quantidade: ");
-                    
-                    Produto pr = s.getProduto(id);
-                    if (pr == null) {
-                        System.out.println("Produto não encontrado.");
-                    } else if (pr.getEstoque() < qtd) {
-                        System.out.println("Estoque insuficiente.");
+                    String id = this.lerLinha("Digite o id do produto: ");                    
+                    Produto prd = s.getProduto(id);
+                    if (prd == null) {
+                        System.out.println("\nProduto não encontrado.");
                     } else {
-                        Item i = new Item(pr, qtd);
+                        int qtd = this.lerInteiro("\nDigite a quantidade: ");
+                        while (qtd > prd.getEstoque()) {
+                            System.out.println("\n\nEstoque insuficiente. (Quantidade disponível: " + prd.getEstoque() + ")");
+                            qtd = this.lerInteiro("Digite novamente a quantidade: ");
+                        }
+                        Item i = new Item(prd, qtd);
                         p.getCarrinho().add(i);
                     }
                 } else if (op != 2) {
-                    System.out.println("Opção inválida. Tente novamente.");
+                    System.out.println("\nOpção inválida. Tente novamente.");
                 }
 
             } while (op != 2);
             
-            p.confirmar();
-            s.addPedido(p);
+            if (p.getCarrinho().size() == 0) {
+                System.out.println("\nPedido vazio. Cancelando pedido.");
+            } else {
+                if (a.getSaldo() < p.valorTotal()) {
+                    System.out.println("\nSaldo insuficiente. Cancelando pedido.");
+                } else {
+                    p.confirmar();
+                    s.addPedido(p);
+                }
+            }
         }
     }
 
@@ -360,7 +371,7 @@ public class Entrada {
     }
 
     public void inserirCredito(Aluno a, Sistema s){
-        double valor = this.lerDouble("Digite um valor de credito a ser inserido ao seu saldo: ");
+        double valor = this.lerDouble("\nDigite um valor de credito a ser inserido ao seu saldo: ");
         a.inserirSaldo(valor);
     }
 
