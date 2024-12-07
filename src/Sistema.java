@@ -69,8 +69,17 @@ public class Sistema {
 
     public Sala getSala(String id) {
         for(Sala s : this.salas) {
-            if (id.equals(s.getId())) {
+            if (id.equals(s.getID())) {
                 return s;
+            }
+        }
+        return null;
+    }
+
+    public Pedido getPedido(String cod) {
+        for(Pedido p : this.pedidos) {
+            if (cod.equals(p.getCod())) {
+                return p;
             }
         }
         return null;

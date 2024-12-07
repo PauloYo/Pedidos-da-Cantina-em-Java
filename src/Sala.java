@@ -20,6 +20,10 @@ public class Sala {
         return this.andar;
     }
 
+    public String getID() {
+        return this.id;
+    }
+
     public String toString() {
         return this.id;
     }

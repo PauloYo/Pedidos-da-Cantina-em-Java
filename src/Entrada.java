@@ -112,11 +112,21 @@ public class Entrada {
         int op = this.lerInteiro(msg);
 
         while (op != 0) {
-            if (op == 1) cadAdmin(s);
-            if (op == 2) cadAluno(s);
-            if (op == 3) cadProduto(s);
-            if (op == 4) {/*cadSala(s);*/}
-            if (op < 0 || op > 4) System.out.println("Opção inválida. Tente novamente: ");
+            if (op == 1) {
+                cadAdmin(s);
+                }
+            if (op == 2) {
+                cadAluno(s);
+                }
+            if (op == 3) {
+                cadProduto(s);
+                }
+            if (op == 4) {
+                cadSala(s);
+                }
+            if (op < 0 || op > 4) {
+                System.out.println("Opção inválida. Tente novamente: ");
+                }
 
             op = this.lerInteiro(msg);
         }
@@ -139,11 +149,21 @@ public class Entrada {
         int op = this.lerInteiro(msg);
 
         while (op != 0) {
-            if (op == 1) {fazerPedido(a, s);}
-            if (op == 2) {/*entregarPedido(a, s);*/}
-            if (op == 3) {/*listarPedidos(a, s);*/}
-            if (op == 4) inserirCredito(a, s);
-            if (op < 0 || op > 4) System.out.println("Opção inválida. Tente novamente: ");
+            if (op == 1) {
+                fazerPedido(a, s);
+                }
+            if (op == 2) {
+                entregarPedido(a, s);
+                }
+            if (op == 3) {
+                meusPedidos(a, s);
+                }
+            if (op == 4) {
+                inserirCredito(a, s);
+                }
+            if (op < 0 || op > 4) {
+                System.out.println("Opção inválida. Tente novamente: ");
+                }
 
             op = this.lerInteiro(msg);
         }
@@ -249,15 +269,11 @@ public class Entrada {
         String bloco = this.lerLinha("Digite o bloco da sala: ");
         String num = this.lerLinha("Digite o número da sala: ");
         String andar = this.lerLinha("Digite o andar da sala (S/T): ");
-        //int capacidade = this.lerInteiro("Digite a capacidade da sala: ");
-
-        //String id = bloco + num + andar;
-
 
         Sala sala = new Sala(bloco, andar, num);
         s.addSala(sala);
 
-        System.out.println("Sala " + sala + " criada com sucesso.");
+        System.out.println("Sala " + sala.toString() + " criada com sucesso.");
     }
 
     /***************************/
@@ -287,8 +303,8 @@ public class Entrada {
             op = this.lerInteiro(": ");
             if (op == 1) {
                 System.out.println("\nProdutos disponíveis:");
-                for (Produto p : s.getProdutos()) {
-                    System.out.println(p.toString());
+                for (Produto prod : s.getProdutos()) {
+                    System.out.println(prod.toString());
                 }
                 
                 String id = this.lerLinha("Digite o id do produto: ");
@@ -300,7 +316,7 @@ public class Entrada {
                     System.out.println("Estoque insuficiente.");
                 } else {
                     Item i = new Item(s.getProduto(id), qtd);
-                    carrinho.add(i);
+                    p.getCarrinho().add(i);
                 }
             } else if (op != 2) {
                 System.out.println("Opção inválida. Tente novamente.");
@@ -308,7 +324,7 @@ public class Entrada {
 
         } while (op != 2);
         
-        Pedido p = new Pedido();
+        p.confirmar();
         
     }
 
@@ -322,7 +338,23 @@ public class Entrada {
 
         String id = this.lerLinha("Digite a id do pedido a ser entregue: ");
 
+        Pedido ped = s.getPedido(id);
+        if (ped != null) {
+            ped.atribuirEntregador(a);
+        } else {
+            System.out.println("Pedido não encontrado.");
+        }
         
+    }
+
+    public void meusPedidos(Aluno a, Sistema s){
+
+        System.out.println("\nMeus pedidos:");
+        for (Pedido ped : s.getPedidos()) {
+            if (ped.getCliente().equals(a)){
+                System.out.println(ped.toString());
+            }
+        }
     }
 
     public void inserirCredito(Aluno a, Sistema s){

@@ -1,9 +1,10 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Pedido {
     private String cod;
     private Aluno cliente, entregador;
-    private Sala s;
+    private Sala sal;
     private ArrayList<Item> carrinho;
     private boolean entregue;
 
@@ -11,14 +12,28 @@ public class Pedido {
         this.cod = cod;
         this.cliente = cl;
         this.entregador = null;
-        this.s = null;
+        this.sal = null;
         this.carrinho = new ArrayList<>();
         this.entregue = false;
     }
 
-    public void setSala(Sala s) {
-        this.s = s;
+    // GETs
+
+    public ArrayList<Item> getCarrinho() {
+        return carrinho;
     }
+
+    public Aluno getCliente(){
+        return this.cliente;
+    }
+
+    // SETs
+
+    public void setSala(Sala s) {
+        this.sal = s;
+    }
+
+    // OUTROS
 
     public String toString() {
         String s = "Codigo do Pedido: " + this.cod + "\nProdutos:";
@@ -58,5 +73,4 @@ public class Pedido {
             i.getProd().retirarDeEstoque(i.getQtd_prod());
         }
     }
-    
 }
