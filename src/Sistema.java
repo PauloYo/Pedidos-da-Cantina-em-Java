@@ -10,6 +10,9 @@ public class Sistema {
     public Sistema() {
         this.alunos = new ArrayList<>();
         this.adms = new ArrayList<>();
+        this.prods = new ArrayList<>();
+        this.pedidos = new ArrayList<>();
+        this.salas = new ArrayList<>();
     }
 
     // Métodos de adição

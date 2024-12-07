@@ -27,6 +27,10 @@ public class Pedido {
         return this.cliente;
     }
 
+    public String getCod() {
+        return this.cod;
+    }
+
     // SETs
 
     public void setSala(Sala s) {
@@ -43,7 +47,7 @@ public class Pedido {
         s += "\nStatus: ";
         if (this.entregue) s += "Entregue";
         else s += "Aberto";
-        s += "Valor Total: ";
+        s += "\nValor Total: R$ " + valorTotal();
         return s;
     }
 

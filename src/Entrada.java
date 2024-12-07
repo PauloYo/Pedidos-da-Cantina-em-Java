@@ -270,7 +270,7 @@ public class Entrada {
         String num = this.lerLinha("Digite o número da sala: ");
         String andar = this.lerLinha("Digite o andar da sala (S/T): ");
 
-        Sala sala = new Sala(bloco, andar, num);
+        Sala sala = new Sala(num, bloco, andar);
         s.addSala(sala);
 
         System.out.println("Sala " + sala.toString() + " criada com sucesso.");
@@ -283,7 +283,7 @@ public class Entrada {
     public void fazerPedido(Aluno a, Sistema s) {
         System.out.println("\n** Fazendo um novo pedido **\n");
         
-        String cod = "PED-" + (s.getPedidos().size() + 1);
+        String cod = "PEDIDO-" + (s.getPedidos().size() + 1);
         Pedido p = new Pedido(cod, a);
         
         System.out.println("\nSalas disponíveis:");
@@ -291,41 +291,42 @@ public class Entrada {
             System.out.println(sala.toString());
         }
         String sala = this.lerLinha("Digite a sala: ");
-        if (s.getSala(sala) != null) {
-            p.setSala(s.getSala(sala));
-        } else {
+        if (s.getSala(sala) == null) {
             System.out.println("Sala não encontrada.");
+        } else {
+            p.setSala(s.getSala(sala));
+
+            int op;
+            do {
+                System.out.println("\n*********************\nEscolha uma opção:\n1) Inserir produto no carrinho.\n2) Fechar pedido.");
+                op = this.lerInteiro(": ");
+                if (op == 1) {
+                    System.out.println("\nProdutos disponíveis:");
+                    for (Produto prod : s.getProdutos()) {
+                        System.out.println(prod.toString());
+                    }
+                    
+                    String id = this.lerLinha("Digite o id do produto: ");
+                    int qtd = this.lerInteiro("Digite a quantidade: ");
+                    
+                    Produto pr = s.getProduto(id);
+                    if (pr == null) {
+                        System.out.println("Produto não encontrado.");
+                    } else if (pr.getEstoque() < qtd) {
+                        System.out.println("Estoque insuficiente.");
+                    } else {
+                        Item i = new Item(pr, qtd);
+                        p.getCarrinho().add(i);
+                    }
+                } else if (op != 2) {
+                    System.out.println("Opção inválida. Tente novamente.");
+                }
+
+            } while (op != 2);
+            
+            p.confirmar();
+            s.addPedido(p);
         }
-
-        int op;
-        do {
-            System.out.println("\n*********************\nEscolha uma opção:\n1) Inserir produto no carrinho.\n2) Fechar pedido.");
-            op = this.lerInteiro(": ");
-            if (op == 1) {
-                System.out.println("\nProdutos disponíveis:");
-                for (Produto prod : s.getProdutos()) {
-                    System.out.println(prod.toString());
-                }
-                
-                String id = this.lerLinha("Digite o id do produto: ");
-                int qtd = this.lerInteiro("Digite a quantidade: ");
-                
-                if (s.getProduto(id) != null) {
-                    System.out.println("Produto não encontrado.");
-                } else if (s.getProduto(id).getEstoque() < qtd) {
-                    System.out.println("Estoque insuficiente.");
-                } else {
-                    Item i = new Item(s.getProduto(id), qtd);
-                    p.getCarrinho().add(i);
-                }
-            } else if (op != 2) {
-                System.out.println("Opção inválida. Tente novamente.");
-            }
-
-        } while (op != 2);
-        
-        p.confirmar();
-        
     }
 
     public void entregarPedido(Aluno a, Sistema s) {
@@ -341,6 +342,7 @@ public class Entrada {
         Pedido ped = s.getPedido(id);
         if (ped != null) {
             ped.atribuirEntregador(a);
+            ped.entregue();
         } else {
             System.out.println("Pedido não encontrado.");
         }
@@ -349,7 +351,7 @@ public class Entrada {
 
     public void meusPedidos(Aluno a, Sistema s){
 
-        System.out.println("\nMeus pedidos:");
+        System.out.println("\nPedidos de " + a.toString() + ":");
         for (Pedido ped : s.getPedidos()) {
             if (ped.getCliente().equals(a)){
                 System.out.println(ped.toString());
