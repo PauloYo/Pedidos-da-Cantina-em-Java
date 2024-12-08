@@ -7,6 +7,7 @@ public class Item {
         this.qtd_prod = qtd_p;
     }
 
+    // Getters:
     public Produto getProd() {
         return this.prod;
     }
@@ -15,10 +16,12 @@ public class Item {
         return this.qtd_prod;
     }
 
+    // Formata para exibição:
     public String toString() {
         return this.prod.toString() + " (QTD: " + this.qtd_prod + ")"; 
     }
 
+    // Calcula o valor total do item:
     public double valorTotal() {
         return this.prod.getValor() * this.qtd_prod;
     }

@@ -17,12 +17,7 @@ public class Pedido {
         this.entregue = false;
     }
 
-    // GETs
-
-    public ArrayList<Item> getCarrinho() {
-        return carrinho;
-    }
-
+    // Getters:
     public Aluno getCliente(){
         return this.cliente;
     }
@@ -31,14 +26,16 @@ public class Pedido {
         return this.cod;
     }
 
-    // SETs
-
-    public void setSala(Sala s) {
-        this.sal = s;
+    public ArrayList<Item> getCarrinho() {
+        return this.carrinho;
     }
 
-    // OUTROS
+    // Setters:
+    public void setSala(Sala s) {
+        this.sal = s;
+    }	
 
+    // Formata para exibição:
     public String toString() {
         String s = "\nCodigo do Pedido: " + this.cod + "\nProdutos:";
         for (Item i : carrinho) {
@@ -51,26 +48,33 @@ public class Pedido {
         return s;
     }
 
+    // Calcula o valor total do pedido:
     public double valorTotal() {
         double total = 0.00;
         for (Item i : carrinho) {
             total += i.valorTotal();
         }
+        total += 1.00; // Taxa de entrega fixa
         return total;
     }
 
+    // Atribui um entregador ao pedido:
     public void atribuirEntregador(Aluno a) {
         this.entregador = a;
     }
 
+    // Verifica se o pedido está disponível:
     public boolean disponivel() {
         return !this.entregue;
     }
 
-    public void entregue() {
+    // Entrega o pedido:
+    public void marcarComoEntregue() {
         this.entregue = true;
+        this.entregador.inserirSaldo(0.80); // 80% da taxa de entrega vai para o entregador
     }
 
+    // Confirma o pedido:
     public void confirmar() {
         this.cliente.retirarSaldo(valorTotal());
         for (Item i : carrinho) {

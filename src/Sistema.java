@@ -15,35 +15,29 @@ public class Sistema {
         this.salas = new ArrayList<>();
     }
 
-    // Métodos de adição
+    // Métodos para adicionar elementos:
 
-    public void addAdmin(Admin a) {
-        this.adms.add(a);
+    public void addAdmin(Admin adm) {
+        this.adms.add(adm);
     }
 
-    public void addAluno(Aluno a) {
-        this.alunos.add(a);
+    public void addAluno(Aluno aln) {
+        this.alunos.add(aln);
     }
 
-    public void addProd(Produto p) {
-        this.prods.add(p);
+    public void addProd(Produto prd) {
+        this.prods.add(prd);
     }
 
-    public void addPedido(Pedido p) {
-        this.pedidos.add(p);
+    public void addPedido(Pedido ped) {
+        this.pedidos.add(ped);
     }
 
-    public void addSala(Sala s) {
-        this.salas.add(s);
+    public void addSala(Sala sal) {
+        this.salas.add(sal);
     }
 
-    // Métodos de verificação
-
-    public boolean sistemaVazio() {
-        return this.adms.size() == 0;
-    }
-
-    // Métodos de buscar elementos
+    // Getters:
 
     public Aluno getAluno(String cpf) {
         for(Aluno a : this.alunos) {
@@ -72,7 +66,7 @@ public class Sistema {
 
     public Sala getSala(String id) {
         for(Sala s : this.salas) {
-            if (id.equals(s.getID())) {
+            if (id.equals(s.getBloco() + s.getNumero() + s.getAndar())) {
                 return s;
             }
         }
@@ -88,18 +82,57 @@ public class Sistema {
         return null;
     }
 
-    // Métodos de buscar listas
+    // Verifica se o sistema acabou de inicializar (sem adms):
 
-    public ArrayList<Produto> getProdutos() {
-        return this.prods;
+    public boolean sistemaVazio() {
+        return this.adms.size() == 0;
     }
 
-    public ArrayList<Pedido> getPedidos() {
-        return this.pedidos;
+    // Métodos para gerar códigos únicos:
+
+    public String gerarCodigoProduto() {
+        return "PROD-" + (this.prods.size() + 1);
     }
 
-    public ArrayList<Sala> getSalas() {
-        return this.salas;
+    public String gerarCodigoPedido() {
+        return "PEDIDO-" + (this.pedidos.size() + 1);
     }
 
+    // Métodos de listar os elementos:
+
+    public void listarProdutos() {
+        for(Produto p : this.prods) {
+            System.out.println(p);
+        }
+    }
+
+    public void listarSalas() {
+        for(Sala s : this.salas) {
+            System.out.println(s);
+        }
+    }
+
+    // Métodos para filtrar elementos:
+
+    public ArrayList<Pedido> filtrarPedidos(boolean disponivel) {
+        ArrayList<Pedido> pedidosFiltrados = new ArrayList<>();
+        for(Pedido p : this.pedidos) {
+            if (p.disponivel() == disponivel) {
+                pedidosFiltrados.add(p);
+            }
+        }
+
+        return pedidosFiltrados;
+    }
+
+    public ArrayList<Pedido> filtrarPedidos(Aluno aln) {
+        ArrayList<Pedido> pedidosFiltrados = new ArrayList<>();
+        for(Pedido p : this.pedidos) {
+            if (p.getCliente().equals(aln)) {
+                pedidosFiltrados.add(p);
+            }
+        }
+
+        return pedidosFiltrados;
+    }
 }

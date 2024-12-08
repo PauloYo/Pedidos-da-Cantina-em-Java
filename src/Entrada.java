@@ -171,6 +171,10 @@ public class Entrada {
         }
     }
 
+    /**
+     * Realiza o login de um usuário no sistema.
+     * @param s: Um objeto da classe Sistema.
+     */
     public void login(Sistema s) {
         System.out.println("\nBem vindo! Digite seus dados de login:");
         String cpf = this.lerLinha("CPF:");
@@ -254,7 +258,7 @@ public class Entrada {
         int estoque = this.lerInteiro("\nDigite a quantidade no estoque: ");
         double valor = this.lerDouble("\nDigite o preço do produto: ");
 
-        String id = "PROD-" + (s.getProdutos().size() + 1);
+        String id = s.gerarCodigoProduto();
 
         Produto p = new Produto(nome, id, estoque, valor);
         s.addProd(p);
@@ -282,49 +286,37 @@ public class Entrada {
     /** FUNCIONALIDADES ALUNO **/
     /***************************/
 
+    /**
+     * Realiza um pedido de produtos por parte de um aluno.
+     * @param a: Objeto da classe Aluno.
+     * @param s: Objeto da classe Sistema.
+     */
     public void fazerPedido(Aluno a, Sistema s) {
         System.out.println("\n** Fazendo um novo pedido **");
         
-        String cod = "PEDIDO-" + (s.getPedidos().size() + 1);
+        String cod = s.gerarCodigoPedido();
         Pedido p = new Pedido(cod, a);
         
-        System.out.println("\nSalas disponíveis:");
-        for (Sala sala : s.getSalas()) {
-            System.out.println(sala.toString());
-        }
-        String sala = this.lerLinha("Digite a sala: ");
-        if (s.getSala(sala) == null) {
+        Sala sala = lerSala(s);
+
+        if (sala == null) {
             System.out.println("\nSala não encontrada.");
         } else {
-            p.setSala(s.getSala(sala));
+            p.setSala(sala);
 
             int op;
             do {
                 System.out.println("\n*********************\nEscolha uma opção:\n1) Inserir produto no carrinho.\n2) Fechar pedido.");
                 op = this.lerInteiro(": ");
+                
                 if (op == 1) {
-                    System.out.println("\nProdutos disponíveis:");
-                    for (Produto prod : s.getProdutos()) {
-                        System.out.println(prod.toString());
-                    }
-                    
-                    String id = this.lerLinha("Digite o id do produto: ");                    
-                    Produto prd = s.getProduto(id);
-                    if (prd == null) {
-                        System.out.println("\nProduto não encontrado.");
-                    } else {
-                        int qtd = this.lerInteiro("\nDigite a quantidade: ");
-                        while (qtd > prd.getEstoque()) {
-                            System.out.println("\n\nEstoque insuficiente. (Quantidade disponível: " + prd.getEstoque() + ")");
-                            qtd = this.lerInteiro("Digite novamente a quantidade: ");
-                        }
-                        Item i = new Item(prd, qtd);
-                        p.getCarrinho().add(i);
+                    Item item = lerItem(s);
+                    if (item != null) {
+                        p.getCarrinho().add(item);
                     }
                 } else if (op != 2) {
                     System.out.println("\nOpção inválida. Tente novamente.");
                 }
-
             } while (op != 2);
             
             if (p.getCarrinho().size() == 0) {
@@ -340,11 +332,58 @@ public class Entrada {
         }
     }
 
+    /**
+     * Lê uma sala disponível no sistema.
+     * @param s: Objeto da classe Sistema.
+     * @return Objeto da classe Sala.
+     */
+    private Sala lerSala(Sistema s) {
+        System.out.println("\nSalas disponíveis:");
+        s.listarSalas();
+
+        String escolha = this.lerLinha("Digite a sala: ");
+        Sala sala = s.getSala(escolha);
+
+        return sala;
+    }
+
+    /**
+     * Lê um item disponível no sistema.
+     * @param s: Objeto da classe Sistema.
+     * @return Objeto da classe Item.
+     */
+    private Item lerItem(Sistema s) {
+        System.out.println("\nProdutos disponíveis:");
+        s.listarProdutos();
+        
+        String id = this.lerLinha("Digite o id do produto: ");                    
+        Produto prd = s.getProduto(id);
+
+        if (prd == null) {
+            System.out.println("\nProduto não encontrado.");
+        } else {
+            int qtd = this.lerInteiro("\nDigite a quantidade: ");
+            while (qtd > prd.getEstoque()) {
+                System.out.println("\n\nEstoque insuficiente. (Quantidade disponível: " + prd.getEstoque() + ")");
+                qtd = this.lerInteiro("Digite novamente a quantidade: ");
+            }
+            Item i = new Item(prd, qtd);
+            return i;
+        }
+        
+        return null;
+    }
+
+    /**
+     * Entrega um pedido feito por um aluno.
+     * @param a: Objeto da classe Aluno.
+     * @param s: Objeto da classe Sistema.
+     */
     public void entregarPedido(Aluno a, Sistema s) {
         System.out.println("\n** Fazendo uma entrega de pedido **\n");
         
         System.out.println("\nPedidos disponíveis:");
-        for (Pedido ped : s.getPedidos()) {
+        for (Pedido ped : s.filtrarPedidos(true)) {
             System.out.println(ped.toString());
         }
 
@@ -353,7 +392,8 @@ public class Entrada {
         Pedido ped = s.getPedido(id);
         if (ped != null) {
             ped.atribuirEntregador(a);
-            ped.entregue();
+            ped.marcarComoEntregue();
+            System.out.println("\nPedido atribuído com sucesso!\nVocê receberá 80% da taxa de entrega.");
         } else {
             System.out.println("Pedido não encontrado.");
         }
@@ -363,10 +403,8 @@ public class Entrada {
     public void meusPedidos(Aluno a, Sistema s){
 
         System.out.println("\nPedidos de " + a.toString() + ":");
-        for (Pedido ped : s.getPedidos()) {
-            if (ped.getCliente().equals(a)){
-                System.out.println(ped.toString());
-            }
+        for (Pedido ped : s.filtrarPedidos(a)) {
+            System.out.println(ped.toString());
         }
     }
 

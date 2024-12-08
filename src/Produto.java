@@ -9,14 +9,11 @@ public class Produto {
         this.estoque = q;
         this.valor = v;
     }
- 
-    public String getCod() {
+
+    // Getters:
+     public String getCod() {
         return this.cod;
     }
-
-    // public String getNome() {
-    //     return nome;
-    // }
 
     public int getEstoque() {
         return estoque;
@@ -26,10 +23,12 @@ public class Produto {
         return valor;
     }
 
+    // Formata para exibição:
     public String toString() {
         return this.cod + ": " + this.nome;
     }
 
+    // Atualiza o estoque:
     public void retirarDeEstoque(int q) {
         if (q > this.estoque) {
             System.out.println("Estoque insuficiente.");
