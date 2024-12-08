@@ -18,4 +18,8 @@ public class Sala {
     public String getAndar() {
         return this.andar;
     }
+
+    public String toString() {
+        return this.bloco + this.numero + this.andar;
+    }
 }

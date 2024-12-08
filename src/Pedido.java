@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Pedido {
@@ -44,7 +43,7 @@ public class Pedido {
         s += "\nStatus: ";
         if (this.entregue) s += "Entregue";
         else s += "Aberto";
-        s += "\nValor Total: R$" + String.format("%.2f", valorTotal());
+        s += "\nSala de entrega: " + this.sal.toString() + "\nValor Total: R$" + String.format("%.2f", valorTotal());
         return s;
     }
 
