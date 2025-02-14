@@ -1,4 +1,4 @@
-public class Usuario {
+public abstract class Usuario {
     protected String cpf, nome;
     private String senha;
 
@@ -18,5 +18,13 @@ public class Usuario {
 
     public String getCPF() {
         return this.cpf;
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    protected String getSenha() {
+        return this.senha;
     }
 }

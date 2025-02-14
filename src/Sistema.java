@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Sistema {
     private ArrayList<Aluno> alunos;
@@ -47,12 +48,20 @@ public class Sistema {
         return null;
     }
 
+    public ArrayList<Aluno> getAllAlunos() {
+        return this.alunos;
+    }
+
     public Admin getAdmin(String cpf) {
         for(Admin a : this.adms) {
             if (cpf.equals(a.getCPF())) return a;
         }
 
         return null;
+    }
+
+    public ArrayList<Admin> getAllAdmins() {
+        return this.adms;
     }
 
     public Produto getProduto(String cod) {
@@ -121,7 +130,6 @@ public class Sistema {
                 pedidosFiltrados.add(p);
             }
         }
-
         return pedidosFiltrados;
     }
 

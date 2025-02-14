@@ -2,6 +2,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Entrada {
     /**
@@ -27,6 +34,8 @@ public class Entrada {
         }
     }
 
+
+
     /**
      * Faz a leitura de uma linha inteira
      * Ignora linhas começando com #, que vão indicar comentários no arquivo de entrada:
@@ -49,9 +58,15 @@ public class Entrada {
      * @return O número digitado pelo usuário convertido para int
      */
     private int lerInteiro(String msg) {
-        // Imprime uma mensagem ao usuário, lê uma linha contendo um inteiro e retorna este inteiro
-        String linha = this.lerLinha(msg);
-        return Integer.parseInt(linha);
+        while (true) {
+            try {
+                // Imprime uma mensagem ao usuário, lê uma linha contendo um inteiro e retorna este inteiro
+                String linha = this.lerLinha(msg);
+                return Integer.parseInt(linha);
+            } catch (NumberFormatException e) {
+                System.out.println("Digite um número inteiro válido por favor.");
+            }
+        }
     }
 
     /**
@@ -60,9 +75,16 @@ public class Entrada {
      * @return O número digitado pelo usuário convertido para double
      */
     private double lerDouble(String msg) {
-        // Imprime uma mensagem ao usuário, lê uma linha contendo um ponto flutuante e retorna este número
-        String linha = this.lerLinha(msg);
-        return Double.parseDouble(linha);
+        while (true){
+            try{
+                // Imprime uma mensagem ao usuário, lê uma linha contendo um ponto flutuante e retorna este número
+                String linha = this.lerLinha(msg);
+                return Double.parseDouble(linha);
+            }
+            catch (NumberFormatException e){
+                System.out.println("Entrada inválida! Digite um número double válido.");
+            }
+        }
     }
 
     /**********************/
@@ -74,6 +96,8 @@ public class Entrada {
      * @param s: Objeto a classe Sistema.
      */
     public void menu(Sistema s) {
+        lerDados(s);
+
         if (s.sistemaVazio()) {
             System.out.println("** Inicializando o sistema **");
             this.cadAdmin(s);
@@ -92,6 +116,8 @@ public class Entrada {
 
             op = this.lerInteiro(msg);
         }
+
+        salvarDados(s);
 
         System.out.println("\nSistema encerrado.\n");
 
@@ -330,6 +356,9 @@ public class Entrada {
                 }
             }
         }
+
+        p.getCarrinho().sort(Comparator.comparing(Item::getQtd_prod).reversed()
+                .thenComparing(item -> item.getProd().getValor(), Comparator.reverseOrder()));
     }
 
     /**
@@ -402,8 +431,15 @@ public class Entrada {
 
     public void meusPedidos(Aluno a, Sistema s){
 
+        ArrayList<Pedido> pedidosFiltrados = s.filtrarPedidos(a);
+
+        pedidosFiltrados.sort(
+            Comparator.comparing((Pedido p) -> p.getCarrinho().size()).reversed()
+                    .thenComparing(Pedido::valorTotal, Comparator.reverseOrder())
+        );
+        
         System.out.println("\nPedidos de " + a.toString() + ":");
-        for (Pedido ped : s.filtrarPedidos(a)) {
+        for (Pedido ped : pedidosFiltrados) {
             System.out.println(ped.toString());
         }
     }
@@ -411,6 +447,63 @@ public class Entrada {
     public void inserirCredito(Aluno a, Sistema s){
         double valor = this.lerDouble("\nDigite um valor de credito a ser inserido ao seu saldo: ");
         a.inserirSaldo(valor);
+    }
+
+    private void lerDados(Sistema s) {
+        try {
+            FileReader f = new FileReader("dados.txt");
+            BufferedReader b = new BufferedReader(f);
+
+            while (true) {
+                String linha = b.readLine();
+                if (linha.equals("ADM")) {
+                    String cpf = b.readLine();
+                    String nome = b.readLine();
+                    String senha = b.readLine();
+                    String email = b.readLine();
+                    Admin a = new Admin(cpf, nome, senha, email);
+                    s.addAdmin(a);
+                } else if (linha.equals("ALU")) {
+                    String cpf = b.readLine();
+                    String nome = b.readLine();
+                    String senha = b.readLine();
+                    Aluno a = new Aluno(cpf, nome, senha);
+                    s.addAluno(a);
+                } else {
+                    break;
+                }
+            }
+            b.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Erro ao ler o arquivo.");
+        } catch (IOException e) {
+            System.out.println("Deu ruim em outro bagui.");
+        }
+    }
+
+    private void salvarDados(Sistema s) {
+        try {
+            FileWriter f = new FileWriter("dados.txt");
+            BufferedWriter b = new BufferedWriter(f);
+
+            for (Admin a : s.getAllAdmins()) {
+                a.salvarArq(b);
+            }
+
+            for (Aluno a : s.getAllAlunos()) {
+                a.salvarArq(b);
+            }
+
+            b.write("FIM\n");
+
+            b.close();
+            f.close();
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar o arquivo.");
+        }
+        System.out.println("Dados salvos com sucesso.");
+        
     }
 
 }

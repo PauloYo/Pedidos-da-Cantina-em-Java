@@ -57,6 +57,15 @@ public class Pedido {
         return total;
     }
 
+    // Conta quantidade de produtos no pedido:
+    public int qtdProdutos() {
+        int qtd = 0;
+        for (Item i : carrinho) {
+            qtd += i.getQtd_prod();
+        }
+        return qtd;
+    }
+
     // Atribui um entregador ao pedido:
     public void atribuirEntregador(Aluno a) {
         this.entregador = a;

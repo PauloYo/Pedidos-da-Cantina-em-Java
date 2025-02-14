@@ -1,4 +1,7 @@
-public class Aluno extends Usuario{
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+public class Aluno extends Usuario implements Salvavel {
     private double saldo;
 
     public Aluno(String cpf, String nome, String senha) {
@@ -26,5 +29,12 @@ public class Aluno extends Usuario{
             this.saldo -= valor;
             return true;
         }
+    }
+
+    public void salvarArq(BufferedWriter bw) throws IOException {
+        bw.write("ALU\n");
+        bw.write(this.cpf + "\n");
+        bw.write(this.nome + "\n");
+        bw.write(this.getSenha() + "\n");
     }
 }
