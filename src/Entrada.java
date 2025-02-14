@@ -415,9 +415,14 @@ public class Entrada {
             throw new ProdutoNaoEncontradoException();
         } else {
             int qtd = this.lerInteiro("\nDigite a quantidade: ");
-            while (qtd > prd.getEstoque()) {
-                System.out.println("\n\nEstoque insuficiente. (Quantidade disponível: " + prd.getEstoque() + ")");
-                qtd = this.lerInteiro("Digite novamente a quantidade: ");
+            while (qtd > prd.getEstoque() || qtd <= 0) {
+                if (qtd <= 0) {
+                    System.out.println("\n\nQuantidade inválida. Digite novamente a quantidade: ");
+                    qtd = this.lerInteiro("Digite novamente a quantidade: ");
+                } else {
+                    System.out.println("\n\nEstoque insuficiente. (Quantidade disponível: " + prd.getEstoque() + ")");
+                    qtd = this.lerInteiro("Digite novamente a quantidade: ");
+                }
             }
             Item i = new Item(prd, qtd);
             return i;
