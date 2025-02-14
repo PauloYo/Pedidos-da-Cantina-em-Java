@@ -111,9 +111,17 @@ public class Entrada {
         int op = this.lerInteiro(msg);
 
         while (op != 0) {
-            if (op == 1) login(s);
-            else System.out.println("Opção inválida. Tente novamente: ");
-
+            if (op == 1) {
+                try {
+                    login(s);
+                } catch (SenhaInvalidaException e) {
+                    System.out.println(e.getMessage());
+                } catch (UsuarioInexistenteException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                System.out.println("Opção inválida. Tente novamente: ");
+            }
             op = this.lerInteiro(msg);
         }
 
@@ -177,31 +185,43 @@ public class Entrada {
         int op = this.lerInteiro(msg);
 
         while (op != 0) {
-            if (op == 1) {
-                fazerPedido(a, s);
-                }
-            if (op == 2) {
-                entregarPedido(a, s);
-                }
-            if (op == 3) {
-                meusPedidos(a, s);
-                }
-            if (op == 4) {
-                inserirCredito(a, s);
-                }
-            if (op < 0 || op > 4) {
-                System.out.println("Opção inválida. Tente novamente: ");
-                }
+            try {
+                if (op == 1) {
+                    fazerPedido(a, s);
+                    }
+                if (op == 2) {
+                    entregarPedido(a, s);
+                    }
+                if (op == 3) {
+                    meusPedidos(a, s);
+                    }
+                if (op == 4) {
+                    inserirCredito(a, s);
+                    }
+                if (op < 0 || op > 4) {
+                    System.out.println("Opção inválida. Tente novamente: ");
+                    }
 
-            op = this.lerInteiro(msg);
-        }
+                op = this.lerInteiro(msg);
+            } catch (SaldoInsuficienteException e) {
+                System.out.println(e.getMessage());
+            } catch (SalaNaoEncontradaException e) {
+                System.out.println(e.getMessage());
+            } catch (PedidoVazioException e) {
+                System.out.println(e.getMessage());
+            } catch (PedidoNaoEncontradoException e) {
+                System.out.println(e.getMessage());
+            } catch (SaldoNegativoException e) {
+                System.out.println(e.getMessage());
+            }
+        } 
     }
 
     /**
      * Realiza o login de um usuário no sistema.
      * @param s: Um objeto da classe Sistema.
      */
-    public void login(Sistema s) {
+    public void login(Sistema s) throws SenhaInvalidaException, UsuarioInexistenteException {
         System.out.println("\nBem vindo! Digite seus dados de login:");
         String cpf = this.lerLinha("CPF:");
         String senha = this.lerLinha("\nSenha:");
@@ -211,7 +231,9 @@ public class Entrada {
             if (adm.validarAcesso(senha)) {
                 this.menu(adm, s);
             }
-            else System.out.println("\nSenha inválida.");
+            else {
+                throw new SenhaInvalidaException();
+            }
         }
         else {
             Aluno a = s.getAluno(cpf);
@@ -219,10 +241,12 @@ public class Entrada {
                 if (a.validarAcesso(senha)) {
                     this.menu(a, s);
                 }
-                else System.out.println("\nSenha inválida");
+                else {
+                    throw new SenhaInvalidaException();
+                }
             }
             else {
-                System.out.println("\nUsuário inexistente");
+                throw new UsuarioInexistenteException();
             }
         }
     }
@@ -317,7 +341,7 @@ public class Entrada {
      * @param a: Objeto da classe Aluno.
      * @param s: Objeto da classe Sistema.
      */
-    public void fazerPedido(Aluno a, Sistema s) {
+    public void fazerPedido(Aluno a, Sistema s) throws SaldoInsuficienteException, SalaNaoEncontradaException, PedidoVazioException {
         System.out.println("\n** Fazendo um novo pedido **");
         
         String cod = s.gerarCodigoPedido();
@@ -326,7 +350,7 @@ public class Entrada {
         Sala sala = lerSala(s);
 
         if (sala == null) {
-            System.out.println("\nSala não encontrada.");
+            throw new SalaNaoEncontradaException();
         } else {
             p.setSala(sala);
 
@@ -336,9 +360,11 @@ public class Entrada {
                 op = this.lerInteiro(": ");
                 
                 if (op == 1) {
-                    Item item = lerItem(s);
-                    if (item != null) {
+                    try {    
+                        Item item = lerItem(s);
                         p.getCarrinho().add(item);
+                    } catch (ProdutoNaoEncontradoException e) {
+                        System.out.println(e.getMessage());
                     }
                 } else if (op != 2) {
                     System.out.println("\nOpção inválida. Tente novamente.");
@@ -346,19 +372,16 @@ public class Entrada {
             } while (op != 2);
             
             if (p.getCarrinho().size() == 0) {
-                System.out.println("\nPedido vazio. Cancelando pedido.");
+                throw new PedidoVazioException();
             } else {
                 if (a.getSaldo() < p.valorTotal()) {
-                    System.out.println("\nSaldo insuficiente. Cancelando pedido.");
+                    throw new SaldoInsuficienteException();
                 } else {
                     p.confirmar();
                     s.addPedido(p);
                 }
             }
         }
-
-        p.getCarrinho().sort(Comparator.comparing(Item::getQtd_prod).reversed()
-                .thenComparing(item -> item.getProd().getValor(), Comparator.reverseOrder()));
     }
 
     /**
@@ -381,7 +404,7 @@ public class Entrada {
      * @param s: Objeto da classe Sistema.
      * @return Objeto da classe Item.
      */
-    private Item lerItem(Sistema s) {
+    private Item lerItem(Sistema s) throws ProdutoNaoEncontradoException {
         System.out.println("\nProdutos disponíveis:");
         s.listarProdutos();
         
@@ -389,7 +412,7 @@ public class Entrada {
         Produto prd = s.getProduto(id);
 
         if (prd == null) {
-            System.out.println("\nProduto não encontrado.");
+            throw new ProdutoNaoEncontradoException();
         } else {
             int qtd = this.lerInteiro("\nDigite a quantidade: ");
             while (qtd > prd.getEstoque()) {
@@ -399,8 +422,6 @@ public class Entrada {
             Item i = new Item(prd, qtd);
             return i;
         }
-        
-        return null;
     }
 
     /**
@@ -408,7 +429,7 @@ public class Entrada {
      * @param a: Objeto da classe Aluno.
      * @param s: Objeto da classe Sistema.
      */
-    public void entregarPedido(Aluno a, Sistema s) {
+    public void entregarPedido(Aluno a, Sistema s) throws PedidoNaoEncontradoException {
         System.out.println("\n** Fazendo uma entrega de pedido **\n");
         
         System.out.println("\nPedidos disponíveis:");
@@ -424,7 +445,7 @@ public class Entrada {
             ped.marcarComoEntregue();
             System.out.println("\nPedido atribuído com sucesso!\nVocê receberá 80% da taxa de entrega.");
         } else {
-            System.out.println("Pedido não encontrado.");
+            throw new PedidoNaoEncontradoException();
         }
         
     }
@@ -444,9 +465,14 @@ public class Entrada {
         }
     }
 
-    public void inserirCredito(Aluno a, Sistema s){
-        double valor = this.lerDouble("\nDigite um valor de credito a ser inserido ao seu saldo: ");
-        a.inserirSaldo(valor);
+    public void inserirCredito(Aluno a, Sistema s) throws SaldoNegativoException {
+        double valor;
+        valor = this.lerDouble("\nDigite um valor de crédito a ser inserido: ");
+        if (valor < 0) {
+            throw new SaldoNegativoException();
+        } else {        
+            a.inserirSaldo(valor);
+        }
     }
 
     private void lerDados(Sistema s) {
@@ -476,9 +502,9 @@ public class Entrada {
             b.close();
             f.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Erro ao ler o arquivo.");
+            System.out.println("\nArquivo não encontrado.\n");
         } catch (IOException e) {
-            System.out.println("Deu ruim em outro bagui.");
+            System.out.println("\nErro ao ler o arquivo.\n");
         }
     }
 
@@ -499,10 +525,12 @@ public class Entrada {
 
             b.close();
             f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("\nErro: Arquivo não encontrado.\n");
         } catch (IOException e) {
-            System.out.println("Erro ao salvar o arquivo.");
+            System.out.println("\nErro: Nao foi possivel escrever no arquivo.\n");
         }
-        System.out.println("Dados salvos com sucesso.");
+        System.out.println("\nDados salvos com sucesso.\n");
         
     }
 

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class Sistema {
     private ArrayList<Aluno> alunos;

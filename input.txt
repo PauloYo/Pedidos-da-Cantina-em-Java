@@ -99,12 +99,4 @@ PEDIDO-1
 maria
 3
 0
-1
-123.456.789-00
-enzo
-2
-123teste
-alfredo
-pipoca
-0
 0

@@ -11,8 +11,4 @@ ALU
 345.678.900-00
 Pedro da Cruz
 pedro
-ALU
-123teste
-alfredo
-pipoca
 FIM

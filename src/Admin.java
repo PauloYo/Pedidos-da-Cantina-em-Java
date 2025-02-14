@@ -10,7 +10,7 @@ public class Admin extends Usuario implements Salvavel {
     }
 
     public String toString() {
-        return super.toString() + " (ADMIN)";
+        return this.nome + " - CPF: " + this.cpf + " (ADMIN)";
     }
 
     public void salvarArq(BufferedWriter bw) throws IOException {

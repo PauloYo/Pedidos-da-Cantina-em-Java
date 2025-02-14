@@ -16,5 +16,4 @@ echo Running the program...
 java -cp %OUT_DIR% Main
 
 echo Program finished.
-
-pause
+echo:

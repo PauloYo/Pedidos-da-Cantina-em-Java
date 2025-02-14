@@ -14,7 +14,7 @@ public class Aluno extends Usuario implements Salvavel {
     }
 
     public String toString() {
-        return super.toString() + " (Saldo: R$" + String.format("%.2f", this.saldo) + ")";
+        return this.nome + " - CPF: " + this.cpf + " (Saldo: R$" + String.format("%.2f", this.saldo) + ")";
     }
 
     public void inserirSaldo(double valor) {

@@ -42,7 +42,7 @@ public class Pedido {
         }
         s += "\nStatus: ";
         if (this.entregue) s += "Entregue";
-        else s += "Aberto";
+        else s += "Em aberto";
         s += "\nSala de entrega: " + this.sal.toString() + "\nValor Total: R$" + String.format("%.2f", valorTotal());
         return s;
     }
