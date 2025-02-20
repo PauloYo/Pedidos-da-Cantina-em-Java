@@ -15,6 +15,22 @@ Este projeto é um sistema de pedidos para uma cantina, desenvolvido em Java.
 - `Pedido`: Classe que possui informações dos pedidos cadastrados no sistema.
 - `Sala`: Classe que possui informações das salas cadastradas no sistema.
 
+## Interfaces
+
+- `Salvavel`: Interface que define o método para salvar dados em um arquivo.
+
+## Exceções
+
+- `EstoqueInsuficienteException`: Exceção lançada quando o estoque de um produto é insuficiente.
+- `PedidoNaoEncontradoException`: Exceção lançada quando um pedido não é encontrado.
+- `PedidoVazioException`: Exceção lançada quando um pedido está vazio.
+- `ProdutoNaoEncontradoException`: Exceção lançada quando um produto não é encontrado.
+- `SalaNaoEncontradaException`: Exceção lançada quando uma sala não é encontrada.
+- `SaldoInsuficienteException`: Exceção lançada quando o saldo de um aluno é insuficiente.
+- `SaldoNegativoException`: Exceção lançada quando o valor do saldo é negativo.
+- `SenhaInvalidaException`: Exceção lançada quando a senha é inválida.
+- `UsuarioInexistenteException`: Exceção lançada quando um usuário não é encontrado.
+
 ## Estrutura do Projeto
 
 - `src/`: Diretório contendo os arquivos fonte do projeto.
