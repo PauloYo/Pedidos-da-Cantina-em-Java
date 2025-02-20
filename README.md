@@ -77,5 +77,7 @@ Este projeto é um sistema de pedidos para uma cantina, desenvolvido em Java.
 
 ## Uso
 
-1. O sistema pode ler comandos do arquivo `input.txt`. Certifique-se de que o arquivo `input.txt` está no diretório raiz do projeto e contém os comandos necessários para testar o sistema.
-2. O sistema também funciona via input manual, caso não encontre o arquivo `input.txt` no diretório raiz do projeto.
+- O sistema pode ler comandos do arquivo `input.txt`. Certifique-se de que o arquivo `input.txt` está no diretório raiz do projeto e contém os comandos necessários para testar o sistema.
+- O sistema também funciona via input manual, caso não encontre o arquivo `input.txt` no diretório raiz do projeto.
+- O sistema irá ler, caso exista, o arquivo `dados.txt` e cadastrar os usuários contidos neles.
+- Também, ao final da execução, o sistema salvará os usuários dentro do arquivo `dados.txt` para que possam ser acessados na próxima execução.
