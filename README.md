@@ -7,7 +7,7 @@ Este projeto é um sistema de pedidos para uma cantina, desenvolvido em Java.
 - `Main`: Classe principal, onde será usado as classes `Sistema` e `Entrada`.
 - `Sistema`: Classe que armazena informações de todos os objetos criados no sistema.
 - `Entrada`: Classe que possui os menus de interface com o usuário e que coleta os inputs.
-- `Usuario`: Classe que possui informações dos usuários cadastrados no sistema.
+- `Usuario`: Classe abstrata que possui informações dos usuários cadastrados no sistema.
 - `Admin`: Herança de `Usuario`. Possui informações dos administradores cadastrados no sistema.
 - `Aluno`: Herança de `Usuario`. Possui informações dos alunos cadastrados no sistema.
 - `Produto`: Classe que possui informações dos produtos cadastrados no sistema.
